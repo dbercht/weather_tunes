@@ -1,0 +1,8 @@
+<div id="weather_wrapper" class="weather_clicker ui-widget ui-corner-all" sound_url="<%=@weather.sound.url%>" style="background: url('<%=@weather.image.url(:thumb)%>');">
+  <h2 class="ui-widget-header ui-corner-all">
+  <%= link_to @weather.name, weather_path(@weather), :class => 'sound_link' %></h2> <br />
+  <% if logged_in? %>
+    <%= link_to 'Edit', edit_weather_path(@weather) %>
+  <% end %>
+</div>
+

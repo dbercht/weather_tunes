@@ -5,8 +5,13 @@ gem 'rails', '3.0.7.rc2'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql2'
+gem "paperclip", "~> 2.3"
+gem 'mysql2', '~> 0.2.7'
 
+gem "geocoder"
+
+gem "nifty-generators", :group => :development
+gem "authlogic"
 
 gem 'factory_girl_rails'
 group :test, :development do
@@ -41,3 +46,4 @@ gem "autotest"
 # group :development, :test do
 #   gem 'webrat'
 # end
+gem "bcrypt-ruby", :require => "bcrypt"

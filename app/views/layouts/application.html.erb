@@ -1,14 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>WeatherTunes</title>
-  <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag :defaults %>
-  <%= csrf_meta_tag %>
-</head>
-<body>
+  <head>
+    <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
+    <%= stylesheet_link_tag "application", "style", "jquery-ui-1.8.12.custom", 'jplayer' %>
+    <%= javascript_include_tag "jquery-1.5.1.min", "jquery-ui-1.8.12.custom.min", "jquery.zweatherfeed.min.js", "audio-player" %>
 
-<%= yield %>
+    <%= csrf_meta_tag %>
+    <%= yield(:head) %>
+  </head>
+  <body>
+    <div id="container">
+      <% flash.each do |name, msg| %>
+        <%= content_tag :div, msg, :id => "flash_#{name}" %>
+      <% end %>
+      <%= yield %>
 
-</body>
+    <div id="footer">
+      <% if logged_in? %>
+        Welcome <%= current_user.username %>! Not you?
+        <%= link_to "Log out", logout_path %>
+      <% else %>
+        <%= link_to "log in", login_path %>.
+      <% end %>
+
+
+    </div>
+    </div>
+  </body>
 </html>

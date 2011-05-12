@@ -1,0 +1,151 @@
+<%title "WeatherTune" %>
+
+<script>
+$(document).ready(function(){
+  $("#weather_wrapper h2").css("visibility", "hidden");
+  $("#audio").css("visibility", "hidden");
+  
+  $( "#volumeSlider" ).slider({
+			value: 100,
+			min: 1,
+			max: 100,
+			slide: function( event, ui ) {
+				$("#audio").jPlayer("volume", ui.value/100);
+			}
+		});
+
+  $("#audio").jPlayer({
+		ready: function () {
+			$(this).jPlayer("setMedia", {
+				mp3: "<%= session[:audio_url] %>",
+				oga: "<%= session[:audio_url] %>"
+			}).jPlayer("play");
+		},
+		ended: function (event) {
+			$(this).jPlayer("play");
+		},
+		supplied: "mp3, oga"
+	});
+
+
+
+  $(".weather_clicker").click( function(){
+    $("#audio").jPlayer("clearMedia").jPlayer("setMedia", {
+				mp3: $(this).attr("sound_url"),
+				oga: $(this).attr("sound_url")
+			}).jPlayer("play");
+	
+  $( "#playButton" ).button({
+			text: false,
+			label: "pause",
+			icons: {
+				primary: "ui-icon-pause"
+			}
+		})
+  
+  });
+
+  $("#clearWeather button").click( function(){
+    $("#weather").html("");
+    $("#temp").html("Press the button!");	
+  });
+
+ 
+  $( "#playButton" ).button({
+			text: false,
+			icons: {
+				primary: "ui-icon-pause"
+			}
+		})
+		.click(function() {
+			var options;
+			if ( $( this ).text() === "play" ) {
+
+			      $("#audio").jPlayer("play");
+				options = {
+					label: "pause",
+					icons: {
+						primary: "ui-icon-pause"
+					}
+				};
+			} else {
+
+      				$("#audio").jPlayer("pause");
+				options = {
+					label: "play",
+					icons: {
+						primary: "ui-icon-play"
+					}
+				};
+			}
+			$( this ).button( "option", options );
+		});
+
+
+  $("#getWeather button").click( function(){
+     $.simpleWeather({
+	zipcode: $("#getWeather input").val(),
+	unit: 'f',
+	success: function(weather) {
+		$("#weather").html("");
+		$("#temp").html("");
+		$("#temp").html("It's " + weather.temp+"&deg; "+weather.units.temp + " out bitch");
+		$("#weather").append("<h2>"+weather.city+", "+weather.region+" "+weather.country+"</h2>");
+		$("#weather").append("<p><strong>Today's High</strong>: "+weather.high+"&deg; "+weather.units.temp+" - <strong>Today's Low</strong>: "+weather.low+"&deg; "+weather.units.temp+"</p>");
+		$("#weather").append("<p><strong>Current Temp</strong>: "+weather.temp+"&deg; "+weather.units.temp+"</p>");
+		$("#weather").append("<p><strong>Wind</strong>: "+weather.wind.direction+" "+weather.wind.speed+" "+weather.units.speed+"</p>");
+		$("#weather").append("<p><strong>Currently</strong>: "+weather.currently+" - <strong>Forecast</strong>: "+weather.forecast+"</p>");
+		$("#weather").append('<p><img src="'+weather.image+'"></p>');
+		$("#weather").append("<p><strong>Sunrise</strong>: "+weather.sunrise+" - <strong>Sunset</strong>: "+weather.sunset+"</p>");
+		$("#weather").append("<p><strong>Last updated</strong>: "+weather.updated+"</p>");
+		$("#weather").append('<p><a href="'+weather.link+'">View forecast at Yahoo! Weather</a></p>');
+	},
+	error: function(error) {
+		$("#weather").html("<p>"+error+"</p>");
+	}
+});
+   });
+		
+$.fn.buildPlayer = function() { 
+  $(this).html(""); 
+}
+
+});
+
+</script>
+</head>
+
+<body>
+
+<div id="audio">
+</div>
+
+<div id="volumeSlider"></div>
+<div id="amount"></div>
+
+<div id="playButtonWrapper">
+  <div id="playButton"> 
+  </div>
+</div>
+
+<div id="weathers" class="mp3">
+  <%@weathers.each do |@weather|%>
+    <%= render @weather %>
+  <% end %>
+</div>
+<div class="clear"></div>
+
+<div id="getWeather">
+  <input type="text"></input>
+  <button>Weather<button />
+</div>
+
+<div id="clearWeather">
+  <button>Clear Weather<button />
+</div>
+
+<div id="weather">
+</div>
+</body>
+
+

@@ -1,0 +1,29 @@
+#weather_wrapper{
+  width: 150px;
+  height: 150px;
+  float: left;
+  margin:10px;
+  border: 1px black solid;
+}
+#weather_wrapper h2{
+  text-align: center;
+}
+
+#weathers{
+  width: 80%;
+  margin: 0px auto;
+}
+
+#playButton{
+  width: 40px;
+  height: 30px;
+  margin: 0px auto;
+}
+
+#playButtonWrapper{
+  width: 100px;
+  margin: 0px auto;
+}
+.clear{
+  clear: both;
+}
